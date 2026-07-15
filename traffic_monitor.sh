@@ -1,1 +1,0 @@
-/root/TrafficCop/trafficcop.sh
