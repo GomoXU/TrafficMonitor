@@ -1,8 +1,6 @@
 # TrafficCop - Smart Traffic Monitoring and Limiting Script
 English | [中文](README.md)
 
-[VTEXS](https://console.vtexs.com/?affid=1554) sponsored this project.
-
 ## Important Notes
 
 1. This script relies on vnstat for traffic statistics. vnstat will only start tracking traffic after installation!
@@ -459,31 +457,3 @@ sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubuserc
 ```
 sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/asia-300g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=ypq123456789/TrafficCop&type=Date)](https://star-history.com/#ypq123456789/TrafficCop&Date)
-
-## Telegram Group:
-https://t.me/+ydvXl1_OBBBiZWM1
-
-## Support the Author
-<span><small>Thank you very much for your interest in this project! Maintaining open-source projects requires a significant investment of time and energy. If you find this project valuable, please consider offering some support, even if it's just the cost of a cup of coffee.
-Your generous assistance will motivate me to continue improving this project and make it more practical. It will also allow me to focus more on open-source community work. If you'd like to provide sponsorship, you can do so through the following channels:</small></span>
-<ul>
-    <li>Star this project &nbsp;<a style="vertical-align: text-bottom;" href="https://github.com/GomoXU/TrafficMonitor">
-      <img src="https://img.shields.io/github/stars/GomoXU/TrafficMonitor?style=social" alt="Star this project" />
-    </a></li>
-    <li>Follow my Github &nbsp;<a style="vertical-align: text-bottom;"  href="https://github.com/GomoXU/TrafficMonitor">
-      <img src="https://img.shields.io/github/followers/ypq123456789?style=social" alt="Follow my Github" />
-    </a></li>
-</ul>
-<table>
-    <thead><tr>
-        <th>WeChat</th>
-        <th>Alipay</th>
-    </tr></thead>
-    <tbody><tr>
-        <td><img style="max-width: 50px" src="https://github.com/ypq123456789/TrafficCop/assets/114487221/fb265eef-e624-4429-b14a-afdf5b2ca9c4" alt="WeChat" /></td>
-        <td><img style="max-width: 50px" src="https://github.com/ypq123456789/TrafficCop/assets/114487221/884b58bd-d76f-4e8f-99f4-cac4b9e97168" alt="Alipay" /></td>
-    </tr></tbody>
-</table>

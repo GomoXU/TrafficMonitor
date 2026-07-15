@@ -1,16 +1,6 @@
 # TrafficCop - 智能流量监控与限制脚本
 [English](README_EN.md) | 中文
 
-[netjett](https://netjett.com/aff.php?aff=115)赞助了本项目
-
-[![image](https://github.com/user-attachments/assets/b1712474-1c08-49f9-a252-43caa33809d1)](https://yxvm.com/aff.php?aff=718)
-
-[NodeSupport](https://github.com/NodeSeekDev/NodeSupport)赞助了本项目
-
-[VTEXS](https://console.vtexs.com/?affid=1554)赞助了本项目
-
-[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com?aff=SwiftPuppy719	 "Powered by DartNode - Free VPS for Open Source")
-
 ## 注意事项
 
 1. 本脚本是基于vnstat的流量统计，vnstat只会在安装后开始统计流量!
@@ -481,33 +471,4 @@ sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubuserc
 ```
 sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/asia-300g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
-## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ypq123456789/TrafficCop&type=Date)](https://star-history.com/#ypq123456789/TrafficCop&Date)
-
-## 交流TG群：
-https://t.me/+ydvXl1_OBBBiZWM1
-
-## 支持作者
-<span><small>非常感谢您对本项目的兴趣！维护开源项目确实需要大量时间和精力投入。若您认为这个项目为您带来了价值，希望您能考虑给予一些支持，哪怕只是一杯咖啡的费用。
-您的慷慨相助将激励我继续完善这个项目，使其更加实用。它还能让我更专心地参与开源社区的工作。如果您愿意提供赞助，可通过下列渠道：</small></span>
-<ul>
-    <li>给该项目点赞 &nbsp;<a style="vertical-align: text-bottom;" href="https://github.com/GomoXU/TrafficMonitor">
-      <img src="https://img.shields.io/github/stars/GomoXU/TrafficMonitor?style=social" alt="给该项目点赞" />
-    </a></li>
-    <li>关注我的 Github &nbsp;<a style="vertical-align: text-bottom;"  href="https://github.com/GomoXU/TrafficMonitor">
-      <img src="https://img.shields.io/github/followers/ypq123456789?style=social" alt="关注我的 Github" />
-    </a></li>
-</ul>
-<table>
-    <thead><tr>
-        <th>微信</th>
-        <th>支付宝</th>
-    </tr></thead>
-    <tbody><tr>
-        <td><img style="max-width: 50px" src="https://github.com/ypq123456789/TrafficCop/assets/114487221/fb265eef-e624-4429-b14a-afdf5b2ca9c4" alt="微信" /></td>
-        <td><img style="max-width: 50px" src="https://github.com/ypq123456789/TrafficCop/assets/114487221/884b58bd-d76f-4e8f-99f4-cac4b9e97168" alt="支付宝" /></td>
-    </tr></tbody>
-</table>
-
-https://vsllm.com
