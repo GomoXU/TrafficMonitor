@@ -51,7 +51,7 @@ sudo tc qdisc del dev $(ip route | grep default | cut -d ' ' -f 5) root
 ## One-Click Installation Scripts
 ### One-Click Interactive Installation Script
 ```
-bash <(curl -sL https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/trafficcop-manager.sh)
+bash <(curl -sL https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/trafficcop-manager.sh)
 ```
 #### Features
 
@@ -79,23 +79,23 @@ bash <(curl -sL https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/t
 
 ### One-Click Complete Suite with Telegram Push (API call, latest version, may return 403):
 ```
-sudo apt update && mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/ypq123456789/TrafficCop/contents/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/ypq123456789/TrafficCop/contents/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
+sudo apt update && mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/GomoXU/TrafficMonitor/contents/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/GomoXU/TrafficMonitor/contents/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
 ```
 ### One-Click Complete Suite with Telegram Push (Raw content download, may be outdated):
 ```
-sudo apt update && mkdir -p /root/TrafficCop && curl -fsSL "https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -fsSL "https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
+sudo apt update && mkdir -p /root/TrafficCop && curl -fsSL "https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -fsSL "https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
 ```
 ### One-Click Complete Suite with PushPlus Push (API call, latest version, may return 403):
 ```
-sudo apt update && mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/ypq123456789/TrafficCop/contents/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/ypq123456789/TrafficCop/contents/pushplus_notifier.sh" | tr -d '\r' > /root/TrafficCop/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && bash /root/TrafficCop/pushplus_notifier.sh
+sudo apt update && mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/GomoXU/TrafficMonitor/contents/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/GomoXU/TrafficMonitor/contents/pushplus_notifier.sh" | tr -d '\r' > /root/TrafficCop/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && bash /root/TrafficCop/pushplus_notifier.sh
 ```
 ### One-Click Complete Suite with PushPlus Push (Raw content download, may be outdated):
 ```
-sudo apt update && mkdir -p /root/TrafficCop && curl -fsSL "https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -fsSL "https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/pushplus_notifier.sh" | tr -d '\r' > /root/TrafficCop/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && bash /root/TrafficCop/pushplus_notifier.sh
+sudo apt update && mkdir -p /root/TrafficCop && curl -fsSL "https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh && sudo curl -fsSL "https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/pushplus_notifier.sh" | tr -d '\r' > /root/TrafficCop/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && bash /root/TrafficCop/pushplus_notifier.sh
 ```
 ### Monitoring Only, No Notifications:
 ```
-sudo apt update &&  mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/ypq123456789/TrafficCop/contents/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh
+sudo apt update &&  mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/GomoXU/TrafficMonitor/contents/trafficcop.sh" | tr -d '\r' > /root/TrafficCop/trafficcop.sh && chmod +x /root/TrafficCop/trafficcop.sh && bash /root/TrafficCop/trafficcop.sh
 ```
 ## Useful Commands
 ### View Logs:
@@ -112,7 +112,7 @@ sudo pkill -f traffic_monitor.sh
 ```
 ### One-Click Remove Speed Limit
 ```
-sudo curl -sSL https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/remove_traffic_limit.sh | sudo bash
+sudo curl -sSL https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/remove_traffic_limit.sh | sudo bash
 ```
 
 ## Script Logic
@@ -161,11 +161,11 @@ Chat ID can also be obtained more easily through bots like [username_to_id_bot](
 ### Related Commands
 One-Click Push Script (API call, latest version, may return 403):
 ```
-sudo apt update && mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/ypq123456789/TrafficCop/contents/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
+sudo apt update && mkdir -p /root/TrafficCop && curl -H "Accept: application/vnd.github.v3.raw" -fsSL "https://api.github.com/repos/GomoXU/TrafficMonitor/contents/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
 ```
 One-Click Push Script (Raw content download, may be outdated):
 ```
-sudo apt update && mkdir -p /root/TrafficCop && curl -fsSL "https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
+sudo apt update && mkdir -p /root/TrafficCop && curl -fsSL "https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/tg_notifier.sh" | tr -d '\r' > /root/TrafficCop/tg_notifier.sh && chmod +x /root/TrafficCop/tg_notifier.sh && bash /root/TrafficCop/tg_notifier.sh
 ```
 View TG Push Scheduled Execution Log
 ```
@@ -193,11 +193,11 @@ To use this feature, provide your PushPlus token during script configuration.
 ### Related Commands
 One-Click Push Script (API call, latest version, may return 403):
 ```
-sudo bash -c "mkdir -p /root/TrafficCop && curl -sSfL -H 'Accept: application/vnd.github.v3.raw' -o /root/TrafficCop/pushplus_notifier.sh https://api.github.com/repos/ypq123456789/TrafficCop/contents/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && /root/TrafficCop/pushplus_notifier.sh"
+sudo bash -c "mkdir -p /root/TrafficCop && curl -sSfL -H 'Accept: application/vnd.github.v3.raw' -o /root/TrafficCop/pushplus_notifier.sh https://api.github.com/repos/GomoXU/TrafficMonitor/contents/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && /root/TrafficCop/pushplus_notifier.sh"
 ```
 One-Click Push Script (Raw content download, may be outdated):
 ```
-sudo mkdir -p /root/TrafficCop && curl -sSfL -o /root/TrafficCop/pushplus_notifier.sh https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && /root/TrafficCop/pushplus_notifier.sh
+sudo mkdir -p /root/TrafficCop && curl -sSfL -o /root/TrafficCop/pushplus_notifier.sh https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/pushplus_notifier.sh && chmod +x /root/TrafficCop/pushplus_notifier.sh && /root/TrafficCop/pushplus_notifier.sh
 ```
 View PushPlus Push Scheduled Execution Log
 ```
@@ -250,14 +250,14 @@ When the machine already has a configured traffic limit, setting a traffic limit
 
 #### Method 1: Via Manager Script (Recommended)
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/trafficcop-manager.sh)
+bash <(curl -sL https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/trafficcop-manager.sh)
 ```
 Select "5) Install Port Traffic Limit"
 
 #### Method 2: Run Script Directly
 ```bash
 sudo mkdir -p /root/TrafficCop && \
-curl -fsSL "https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/port_traffic_limit.sh" | tr -d '\r' > /root/TrafficCop/port_traffic_limit.sh && \
+curl -fsSL "https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/port_traffic_limit.sh" | tr -d '\r' > /root/TrafficCop/port_traffic_limit.sh && \
 chmod +x /root/TrafficCop/port_traffic_limit.sh && \
 bash /root/TrafficCop/port_traffic_limit.sh
 ```
@@ -306,7 +306,7 @@ sudo bash /root/TrafficCop/port_traffic_limit.sh --remove
 
 #### Access via Manager (Recommended)
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/trafficcop-manager.sh)
+bash <(curl -sL https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/trafficcop-manager.sh)
 # Select 12) View Port Traffic
 # Select 13) Manage Port Configuration
 ```
@@ -424,40 +424,40 @@ Port traffic limit feature is implemented using:
 ## Preset Configurations
 ### Alibaba Cloud CDT 200GB:
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/ali-200g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/ali-200g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### Alibaba Cloud CDT 20GB:
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/ali-20g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/ali-20g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### Alibaba Cloud Lightweight 1TB:
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/ali-1T && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/ali-1T && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### Azure Student 15GB:
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/az-15g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/az-15g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### Azure Student 115GB:
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/az-115g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/az-115g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 
 ### GCP 625GB [High Traffic Ultimate Solution](https://www.nodeseek.com/post-115166-1):
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/gcp-625g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/gcp-625g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### GCP 200GB (Standard route with 200GB free traffic):
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/gcp-200g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/gcp-200g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### Alice 1500GB:
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/alice-1500g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/alice-1500g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### Asia Cloud 300GB:
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/asia-300g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/GomoXU/TrafficMonitor/main/asia-300g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ## Star History
 
@@ -470,10 +470,10 @@ https://t.me/+ydvXl1_OBBBiZWM1
 <span><small>Thank you very much for your interest in this project! Maintaining open-source projects requires a significant investment of time and energy. If you find this project valuable, please consider offering some support, even if it's just the cost of a cup of coffee.
 Your generous assistance will motivate me to continue improving this project and make it more practical. It will also allow me to focus more on open-source community work. If you'd like to provide sponsorship, you can do so through the following channels:</small></span>
 <ul>
-    <li>Star this project &nbsp;<a style="vertical-align: text-bottom;" href="https://github.com/ypq123456789/TrafficCop">
-      <img src="https://img.shields.io/github/stars/ypq123456789/TrafficCop?style=social" alt="Star this project" />
+    <li>Star this project &nbsp;<a style="vertical-align: text-bottom;" href="https://github.com/GomoXU/TrafficMonitor">
+      <img src="https://img.shields.io/github/stars/GomoXU/TrafficMonitor?style=social" alt="Star this project" />
     </a></li>
-    <li>Follow my Github &nbsp;<a style="vertical-align: text-bottom;"  href="https://github.com/ypq123456789/TrafficCop">
+    <li>Follow my Github &nbsp;<a style="vertical-align: text-bottom;"  href="https://github.com/GomoXU/TrafficMonitor">
       <img src="https://img.shields.io/github/followers/ypq123456789?style=social" alt="Follow my Github" />
     </a></li>
 </ul>
