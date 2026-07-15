@@ -239,19 +239,34 @@ get_main_interface() {
     echo $main_interface| tee -a "$LOG_FILE"
 }
 
-# 初始配置函数
+# 初始配置函数（支持编辑模式：变量已设置时显示当前值作为默认值）
 echo "$(date '+%Y-%m-%d %H:%M:%S') 开始初始化配置"| tee -a "$LOG_FILE"
 initial_config() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') 正在检测主要网络接口..."| tee -a "$LOG_FILE"
-    MAIN_INTERFACE=$(get_main_interface)
+    MAIN_INTERFACE=${MAIN_INTERFACE:-$(get_main_interface)}
 
+    # 流量统计模式
+    local mode_names=("out" "in" "total" "max")
+    local mode_labels=("只计算出站流量" "只计算进站流量" "出进站流量都计算" "出站和进站流量只取大")
+    local default_mode_num=""
+    for i in "${!mode_names[@]}"; do
+        if [ "${mode_names[$i]}" = "$TRAFFIC_MODE" ]; then
+            default_mode_num=$((i+1))
+            break
+        fi
+    done
     while true; do
         echo "$(date '+%Y-%m-%d %H:%M:%S') 请选择流量统计模式："| tee -a "$LOG_FILE"
         echo "$(date '+%Y-%m-%d %H:%M:%S') 1. 只计算出站流量"| tee -a "$LOG_FILE"
         echo "$(date '+%Y-%m-%d %H:%M:%S') 2. 只计算进站流量"| tee -a "$LOG_FILE"
         echo "$(date '+%Y-%m-%d %H:%M:%S') 3. 出进站流量都计算"| tee -a "$LOG_FILE"
         echo "$(date '+%Y-%m-%d %H:%M:%S') 4. 出站和进站流量只取大"| tee -a "$LOG_FILE"
-        read -p "请输入选择 (1-4): " mode_choice
+        local mode_prompt="请输入选择 (1-4)"
+        [ -n "$default_mode_num" ] && mode_prompt="$mode_prompt [当前: $default_mode_num]"
+        read -p "$mode_prompt: " mode_choice
+        if [ -z "$mode_choice" ] && [ -n "$default_mode_num" ]; then
+            mode_choice=$default_mode_num
+        fi
         case $mode_choice in
             1) TRAFFIC_MODE="out"; break ;;
             2) TRAFFIC_MODE="in"; break ;;
@@ -261,24 +276,42 @@ initial_config() {
         esac
     done
 
-    read -p "请选择流量统计周期 (m/q/y，默认为m): " period_choice
+    # 统计周期
+    local period_prompt="请选择流量统计周期 (m/q/y)"
+    [ -n "$TRAFFIC_PERIOD" ] && period_prompt="$period_prompt [当前: $TRAFFIC_PERIOD]"
+    read -p "$period_prompt: " period_choice
+    if [ -z "$period_choice" ]; then
+        period_choice="${TRAFFIC_PERIOD:0:1}"
+    fi
     case $period_choice in
-        q) TRAFFIC_PERIOD="quarterly" ;;
-        y) TRAFFIC_PERIOD="yearly" ;;
-        m|"") TRAFFIC_PERIOD="monthly" ;;
+        q|Q) TRAFFIC_PERIOD="quarterly" ;;
+        y|Y) TRAFFIC_PERIOD="yearly" ;;
+        m|M|"") TRAFFIC_PERIOD="monthly" ;;
         *) echo "无效输入，使用默认值：monthly"; TRAFFIC_PERIOD="monthly" ;;
     esac
 
-    read -p "请输入周期起始日 (1-31，默认为1): " PERIOD_START_DAY
-    if [[ -z "$PERIOD_START_DAY" ]]; then
-        PERIOD_START_DAY=1
-    elif ! [[ "$PERIOD_START_DAY" =~ ^[1-9]$|^[12][0-9]$|^3[01]$ ]]; then
-        echo "无效输入，使用默认值：1"
-        PERIOD_START_DAY=1
+    # 周期起始日
+    local day_prompt="请输入周期起始日 (1-31)"
+    [ -n "${PERIOD_START_DAY:-}" ] && day_prompt="$day_prompt [当前: $PERIOD_START_DAY]"
+    read -p "$day_prompt: " PERIOD_START_DAY_INPUT
+    if [ -z "$PERIOD_START_DAY_INPUT" ]; then
+        PERIOD_START_DAY="${PERIOD_START_DAY:-1}"
+    elif ! [[ "$PERIOD_START_DAY_INPUT" =~ ^[1-9]$|^[12][0-9]$|^3[01]$ ]]; then
+        echo "无效输入，使用默认值：${PERIOD_START_DAY:-1}"
+        PERIOD_START_DAY="${PERIOD_START_DAY:-1}"
+    else
+        PERIOD_START_DAY=$PERIOD_START_DAY_INPUT
     fi
 
+    # 流量限制
     while true; do
-        read -p "请输入流量限制 (GB): " TRAFFIC_LIMIT
+        local limit_prompt="请输入流量限制 (GB)"
+        [ -n "$TRAFFIC_LIMIT" ] && limit_prompt="$limit_prompt [当前: $TRAFFIC_LIMIT]"
+        read -p "$limit_prompt: " TRAFFIC_LIMIT_INPUT
+        if [ -z "$TRAFFIC_LIMIT_INPUT" ] && [ -n "$TRAFFIC_LIMIT" ]; then
+            break
+        fi
+        TRAFFIC_LIMIT=$TRAFFIC_LIMIT_INPUT
         if [[ "$TRAFFIC_LIMIT" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
             break
         else
@@ -286,8 +319,15 @@ initial_config() {
         fi
     done
 
+    # 容错范围
     while true; do
-        read -p "请输入容错范围 (GB): " TRAFFIC_TOLERANCE
+        local tol_prompt="请输入容错范围 (GB)"
+        [ -n "$TRAFFIC_TOLERANCE" ] && tol_prompt="$tol_prompt [当前: $TRAFFIC_TOLERANCE]"
+        read -p "$tol_prompt: " TRAFFIC_TOLERANCE_INPUT
+        if [ -z "$TRAFFIC_TOLERANCE_INPUT" ] && [ -n "$TRAFFIC_TOLERANCE" ]; then
+            break
+        fi
+        TRAFFIC_TOLERANCE=$TRAFFIC_TOLERANCE_INPUT
         if [[ "$TRAFFIC_TOLERANCE" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
             break
         else
@@ -295,32 +335,48 @@ initial_config() {
         fi
     done
 
+    # 限制模式
+    local default_limit_mode=""
+    [ "$LIMIT_MODE" = "tc" ] && default_limit_mode=1
+    [ "$LIMIT_MODE" = "shutdown" ] && default_limit_mode=2
     while true; do
         echo "$(date '+%Y-%m-%d %H:%M:%S') 请选择限制模式："| tee -a "$LOG_FILE"
         echo "$(date '+%Y-%m-%d %H:%M:%S') 1. TC 模式（更灵活）"| tee -a "$LOG_FILE"
         echo "$(date '+%Y-%m-%d %H:%M:%S') 2. 关机模式（更安全）"| tee -a "$LOG_FILE"
-        read -p "请输入选择 (1-2): " limit_mode_choice
+        local lm_prompt="请输入选择 (1-2)"
+        [ -n "$default_limit_mode" ] && lm_prompt="$lm_prompt [当前: $default_limit_mode]"
+        read -p "$lm_prompt: " limit_mode_choice
+        if [ -z "$limit_mode_choice" ] && [ -n "$default_limit_mode" ]; then
+            limit_mode_choice=$default_limit_mode
+        fi
         case $limit_mode_choice in
-            1) 
+            1)
                 LIMIT_MODE="tc"
-                read -p "请输入限速 (kbit/s，默认为20): " LIMIT_SPEED
-                LIMIT_SPEED=${LIMIT_SPEED:-20}
+                local speed_prompt="请输入限速 (kbit/s)"
+                [ -n "${LIMIT_SPEED:-}" ] && speed_prompt="$speed_prompt [当前: ${LIMIT_SPEED}]"
+                read -p "$speed_prompt: " LIMIT_SPEED_INPUT
+                if [ -z "$LIMIT_SPEED_INPUT" ]; then
+                    LIMIT_SPEED="${LIMIT_SPEED:-20}"
+                else
+                    LIMIT_SPEED=$LIMIT_SPEED_INPUT
+                fi
                 if ! [[ "$LIMIT_SPEED" =~ ^[0-9]+$ ]]; then
                     echo "无效输入，使用默认值：20 kbit/s"
                     LIMIT_SPEED=20
                 fi
-                break 
+                break
                 ;;
-            2) 
+            2)
                 LIMIT_MODE="shutdown"
                 LIMIT_SPEED=""  # 关机模式不需要限速
-                break 
+                break
                 ;;
             *) echo "无效输入，请重新选择。" ;;
         esac
     done
 
     write_config
+    echo "$(date '+%Y-%m-%d %H:%M:%S') 配置已保存"| tee -a "$LOG_FILE"
 }
 
 # 获取当前周期的起始日期
@@ -564,6 +620,13 @@ fi
     if [ "$1" = "--quiet-setup" ]; then
         # 静默检查依赖（不写日志文件）
         check_and_install_packages > /dev/null 2>&1
+        # 尝试读取已有配置，这样编辑时会显示当前值作为默认
+        if [ -f "$CONFIG_FILE" ]; then
+            source "$CONFIG_FILE" 2>/dev/null
+            echo "当前配置已加载，按回车可保留原值"
+        else
+            echo "未检测到已有配置，开始全新设置"
+        fi
         echo "开始配置流量监控..."
         initial_config
         setup_crontab
