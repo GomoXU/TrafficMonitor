@@ -32,57 +32,6 @@ kill_other_instances() {
 
 
 
-migrate_files() {
-    # 创建新的工作目录
-    mkdir -p "$WORK_DIR"
-
-    # 迁移配置文件
-    if [ -f "/root/traffic_monitor_config.txt" ]; then
-        mv "/root/traffic_monitor_config.txt" "$CONFIG_FILE"
-    fi
-
-    # 迁移日志文件
-    if [ -f "/root/traffic_monitor.log" ]; then
-        mv "/root/traffic_monitor.log" "$LOG_FILE"
-    fi
-
-    # 删除旧的脚本文件，而不是迁移
-    if [ -f "/root/traffic_monitor.sh" ]; then
-        rm "/root/traffic_monitor.sh"
-        echo "$(date '+%Y-%m-%d %H:%M:%S') 旧的脚本文件已删除" | tee -a "$LOG_FILE"
-    fi
-    
-    # 创建软链接以保持向后兼容（如果crontab中仍在使用旧名称）
-    if [ ! -e "$WORK_DIR/traffic_monitor.sh" ] && [ -f "$WORK_DIR/trafficcop.sh" ]; then
-        ln -sf "$WORK_DIR/trafficcop.sh" "$WORK_DIR/traffic_monitor.sh"
-        echo "$(date '+%Y-%m-%d %H:%M:%S') 已创建 traffic_monitor.sh 软链接" | tee -a "$LOG_FILE"
-    fi
-
-    # 迁移软件包安装标志文件
-    if [ -f "/root/.traffic_monitor_packages_installed" ]; then
-        mv "/root/.traffic_monitor_packages_installed" "$WORK_DIR/.traffic_monitor_packages_installed"
-    fi
-
-    # 迁移其他可能存在的相关文件
-    for file in /root/traffic_monitor_*.txt /root/traffic_monitor_*.log; do
-        if [ -f "$file" ]; then
-            mv "$file" "$WORK_DIR/"
-        fi
-    done
-
-    # 更新 crontab 中的脚本路径
-    if crontab -l | grep -q "/root/traffic_monitor.sh"; then
-        crontab -l | sed "s|/root/traffic_monitor.sh|$SCRIPT_PATH|g" | crontab -
-        echo "$(date '+%Y-%m-%d %H:%M:%S') Crontab 已更新为新的脚本路径" | tee -a "$LOG_FILE"
-    fi
-
-    echo "$(date '+%Y-%m-%d %H:%M:%S') 文件已迁移到新的工作目录: $WORK_DIR" | tee -a "$LOG_FILE"
-}
-
-
-
-
-
 check_and_install_packages() {
     local packages=("vnstat" "jq" "bc" "iproute2" "cron")
     local need_install=false
@@ -578,10 +527,11 @@ main() {
    # 调用函数来杀死其他实例
    kill_other_instances
   
-  # 在脚本开始时调用迁移函数
-   migrate_files
 
-  # 切换到工作目录
+	  # 确保工作目录存在
+	  mkdir -p "$WORK_DIR"
+
+	  # 切换到工作目录
    cd "$WORK_DIR" || exit 1
 
 # 创建锁文件（如果不存在）
