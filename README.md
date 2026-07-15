@@ -467,11 +467,11 @@ sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubuserc
 
 ### GCP 625G[大流量极致解法](https://www.nodeseek.com/post-115166-1)：
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/GCP-625g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/gcp-625g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### GCP 200G(白嫖标准路由200g流量就跑)：
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/GCP-200g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/gcp-200g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### alice 1500G：
 ```

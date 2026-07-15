@@ -35,20 +35,30 @@ fi
 
 # 检查并安装jq
 check_and_install_jq() {
-    if ! command -v jq &> /dev/null; then
-        echo -e "${YELLOW}jq未安装，正在安装...${NC}"
-        if [ -f /etc/debian_version ]; then
-            apt-get update && apt-get install -y jq
-        elif [ -f /etc/redhat-release ]; then
-            yum install -y jq
-        else
-            echo -e "${RED}无法自动安装jq，请手动安装${NC}"
-            return 1
-        fi
+    if command -v jq &> /dev/null; then
+        return 0
     fi
-    return 0
+    echo -e "${YELLOW}jq未安装，正在安装...${NC}"
+    if [ -f /etc/debian_version ]; then
+        # 依次尝试带sudo和不带sudo的安装方式
+        if command -v sudo &>/dev/null; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq jq 2>/dev/null
+        fi
+        command -v jq &>/dev/null || apt-get install -y jq 2>/dev/null
+    elif [ -f /etc/redhat-release ]; then
+        yum install -y jq 2>/dev/null
+    else
+        # 尝试通用方式
+        command -v apk &>/dev/null && apk add jq 2>/dev/null
+    fi
+    if command -v jq &>/dev/null; then
+        echo -e "${GREEN}jq安装成功${NC}"
+        return 0
+    else
+        echo -e "${RED}无法自动安装jq，请手动安装${NC}"
+        return 1
+    fi
 }
-
 # 检查必要工具
 check_required_tools() {
     local tools=("iptables" "bc")
@@ -1128,6 +1138,14 @@ cron_mode() {
     echo "-----------------------------------------------------" >> "$PORT_LOG_FILE"
     echo "$(date '+%Y-%m-%d %H:%M:%S') Port Traffic Limit v${SCRIPT_VERSION} (最后更新: ${LAST_UPDATE})" >> "$PORT_LOG_FILE"
     
+    # 检查jq是否可用（cron模式下仍需要jq）
+    if ! command -v jq &>/dev/null; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') jq未安装，尝试自动安装..." >> "$PORT_LOG_FILE"
+        check_and_install_jq || {
+            echo "$(date '+%Y-%m-%d %H:%M:%S') jq安装失败，跳过本次检查" >> "$PORT_LOG_FILE"
+            exit 1
+        }
+    fi
     if [ ! -f "$PORT_CONFIG_FILE" ]; then
         echo "$(date '+%Y-%m-%d %H:%M:%S') 配置文件不存在，跳过检查" >> "$PORT_LOG_FILE"
         exit 0

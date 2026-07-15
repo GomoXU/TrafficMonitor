@@ -445,11 +445,11 @@ sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubuserc
 
 ### GCP 625GB [High Traffic Ultimate Solution](https://www.nodeseek.com/post-115166-1):
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/GCP-625g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/gcp-625g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### GCP 200GB (Standard route with 200GB free traffic):
 ```
-sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/GCP-200g && cat /root/TrafficCop/traffic_monitor_config.txt
+sudo curl -o /root/TrafficCop/traffic_monitor_config.txt https://raw.githubusercontent.com/ypq123456789/TrafficCop/main/gcp-200g && cat /root/TrafficCop/traffic_monitor_config.txt
 ```
 ### Alice 1500GB:
 ```

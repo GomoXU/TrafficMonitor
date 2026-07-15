@@ -95,11 +95,10 @@ check_and_install_packages() {
         fi
     done
 
-    if $need_install; then
+if $need_install; then
         echo "$(date '+%Y-%m-%d %H:%M:%S') 正在更新软件包列表..." | tee -a "$LOG_FILE"
         if ! sudo apt-get update; then
-            echo "$(date '+%Y-%m-%d %H:%M:%S') 更新软件包列表失败，请检查网络连接和系统状态。" | tee -a "$LOG_FILE"
-            return 1
+            echo "$(date '+%Y-%m-%d %H:%M:%S') 更新软件包列表失败，尝试直接安装..." | tee -a "$LOG_FILE"
         fi
 
         for package in "${packages[@]}"; do
@@ -108,12 +107,15 @@ check_and_install_packages() {
                 if sudo apt-get install -y "$package"; then
                     echo "$(date '+%Y-%m-%d %H:%M:%S') $package 安装成功" | tee -a "$LOG_FILE"
                 else
-                    echo "$(date '+%Y-%m-%d %H:%M:%S') $package 安装失败，请手动检查并安装。" | tee -a "$LOG_FILE"
-                    return 1
+                    echo "$(date '+%Y-%m-%d %H:%M:%S') $package 安装失败（带sudo），尝试直接安装..." | tee -a "$LOG_FILE"
+                    if apt-get install -y "$package" 2>/dev/null; then
+                        echo "$(date '+%Y-%m-%d %H:%M:%S') $package 安装成功（无sudo）" | tee -a "$LOG_FILE"
+                    else
+                        echo "$(date '+%Y-%m-%d %H:%M:%S') $package 安装失败，请手动安装: apt-get install -y $package" | tee -a "$LOG_FILE"
+                    fi
                 fi
             fi
         done
-    else
         echo "$(date '+%Y-%m-%d %H:%M:%S') 所有必要的软件包已安装" | tee -a "$LOG_FILE"
     fi
 
@@ -152,7 +154,7 @@ check_existing_setup() {
      if [ -s "$CONFIG_FILE" ]; then  
         source "$CONFIG_FILE"
         echo "$(date '+%Y-%m-%d %H:%M:%S') 配置已存在"| tee -a "$LOG_FILE"
-        if crontab -l 2>/dev/null | grep -q "$SCRIPT_PATH --run"; then
+        if crontab -l 2>/dev/null | grep -qE "$SCRIPT_PATH --(run|cron)"; then
             echo "$(date '+%Y-%m-%d %H:%M:%S') 每分钟一次的定时任务已在执行。"| tee -a "$LOG_FILE"
         else
             echo "$(date '+%Y-%m-%d %H:%M:%S') 警告：定时任务未找到，可能需要重新设置。"| tee -a "$LOG_FILE"
@@ -435,7 +437,35 @@ get_traffic_usage() {
         # 确保小数点前至少有一个0
         printf "%.3f\n" "$usage_gib" 2>/dev/null || echo "0.000"
     else
-        echo "0.000"
+        echo "$(date '+%Y-%m-%d %H:%M:%S') 无法通过 jq 获取 vnstat 数据，尝试 vnstat --oneline 降级方案..." >&2
+        local oneline=$(vnstat -i "$MAIN_INTERFACE" --oneline 2>/dev/null | head -n1)
+        if [ -n "$oneline" ]; then
+            # vnstat --oneline 格式: 1;eth0;2026-07-15;1.23 GiB;4.56 GiB;5.79 GiB
+            # 字段6（;分隔）是总计GB
+            local oneline_val=$(echo "$oneline" | cut -d";" -f6 | grep -oE "^[0-9]+(\.[0-9]+)?" 2>/dev/null)
+            if [ -z "$oneline_val" ]; then
+                # 如果字段6不是数字，尝试字段4+5（入站+出站）
+                local oneline_rx=$(echo "$oneline" | cut -d";" -f4 | grep -oE "^[0-9]+(\.[0-9]+)?" 2>/dev/null)
+                local oneline_tx=$(echo "$oneline" | cut -d";" -f5 | grep -oE "^[0-9]+(\.[0-9]+)?" 2>/dev/null)
+                if [ -n "$oneline_rx" ] && [ -n "$oneline_tx" ]; then
+                    # 根据流量模式计算
+                    case $TRAFFIC_MODE in
+                        out) oneline_val="$oneline_tx" ;;
+                        in) oneline_val="$oneline_rx" ;;
+                        total) oneline_val=$(echo "$oneline_rx + $oneline_tx" | bc 2>/dev/null || echo "0") ;;
+                        max) oneline_val=$(echo "if ($oneline_rx > $oneline_tx) $oneline_rx else $oneline_tx" | bc 2>/dev/null || echo "0") ;;
+                        *) oneline_val="$oneline_rx" ;;
+                    esac
+                fi
+            fi
+            if [ -n "$oneline_val" ] && [ "$oneline_val" != "0" ] && [ "$oneline_val" != "0.000" ]; then
+                printf "%.3f\n" "$oneline_val" 2>/dev/null || echo "$oneline_val"
+            else
+                echo "0.000"
+            fi
+        else
+            echo "0.000"
+        fi
     fi
 }
 
@@ -480,7 +510,7 @@ setup_crontab() {
     crontab -l 2>/dev/null | grep -v "$SCRIPT_PATH" | crontab -
 
     # 添加新的脚本任务
-    (crontab -l 2>/dev/null; echo "* * * * * $SCRIPT_PATH --run") | crontab -
+    (crontab -l 2>/dev/null; echo "* * * * * $SCRIPT_PATH --cron") | crontab -
 
     echo "$(date '+%Y-%m-%d %H:%M:%S') Crontab 已设置，每分钟运行一次"| tee -a "$LOG_FILE"
 }
@@ -509,9 +539,19 @@ if ! flock -n 9; then
     exit 1
 fi
 
-    # 检查是否以 --run 模式运行
-    if [ "\$1" = "--run" ]; then
+    # 检查是否以 --run/--cron 模式运行
+    if [ "$1" = "--run" ] || [ "$1" = "--cron" ]; then
         echo "$(date '+%Y-%m-%d %H:%M:%S') 正在以自动化模式运行" | tee -a "$LOG_FILE"
+        # 在自动化模式下也确保 jq 可用
+        if ! command -v jq &>/dev/null; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') jq 未安装，尝试自动安装..." | tee -a "$LOG_FILE"
+            apt-get update -qq && apt-get install -y -qq jq
+            if command -v jq &>/dev/null; then
+                echo "$(date '+%Y-%m-%d %H:%M:%S') jq 安装成功" | tee -a "$LOG_FILE"
+            else
+                echo "$(date '+%Y-%m-%d %H:%M:%S') 警告: jq 安装失败，流量统计将降级" | tee -a "$LOG_FILE"
+            fi
+        fi
         if read_config; then
             check_reset_limit
             check_and_limit_traffic
@@ -521,7 +561,7 @@ fi
         return
     fi
 
- # 非 --run 模式下的操作
+ # 非 --run/--cron 模式下的操作
   # 首先检查并安装必要的软件包
     check_and_install_packages
     if check_existing_setup; then
