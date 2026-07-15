@@ -560,6 +560,17 @@ fi
         return
     fi
 
+    # --quiet-setup 模式：由 manager 调用，简化输出，直接进入配置
+    if [ "$1" = "--quiet-setup" ]; then
+        # 静默检查依赖（不写日志文件）
+        check_and_install_packages > /dev/null 2>&1
+        echo "开始配置流量监控..."
+        initial_config
+        setup_crontab
+        echo "流量监控配置完成，脚本将每分钟自动运行一次"
+        return
+    fi
+
  # 非 --run/--cron 模式下的操作
   # 首先检查并安装必要的软件包
     check_and_install_packages
